@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpendWise — Personal Expense Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-icon">💰</span>
+      <span class="brand-name">SpendWise</span>
+    </div>
+
+    <nav class="nav">
+      <a href="#" class="nav-item active" data-view="dashboard">
+        <span class="nav-icon">▦</span> Dashboard
+      </a>
+      <a href="#" class="nav-item" data-view="transactions">
+        <span class="nav-icon">☰</span> Transactions
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button id="seedBtn" class="btn-ghost">✦ Load demo data</button>
+      <button id="themeToggle" class="btn-ghost">🌙 Dark mode</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <header class="topbar">
+      <div>
+        <h1>Welcome back 👋</h1>
+        <p class="subtitle">Here's what's happening with your money.</p>
+      </div>
+      <button id="addBtn" class="btn-primary">+ Add Transaction</button>
+    </header>
+
+    <!-- Summary cards -->
+    <section class="cards">
+      <div class="card card-balance">
+        <div class="card-label">Balance</div>
+        <div class="card-value" id="statBalance">₹0</div>
+        <div class="card-trend">Net available</div>
+      </div>
+      <div class="card card-income">
+        <div class="card-label">Income</div>
+        <div class="card-value" id="statIncome">₹0</div>
+        <div class="card-trend">↑ Money in</div>
+      </div>
+      <div class="card card-expense">
+        <div class="card-label">Expenses</div>
+        <div class="card-value" id="statExpense">₹0</div>
+        <div class="card-trend">↓ Money out</div>
+      </div>
+      <div class="card card-count">
+        <div class="card-label">Transactions</div>
+        <div class="card-value" id="statCount">0</div>
+        <div class="card-trend">Total logged</div>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="charts">
+      <div class="panel">
+        <h3>Spending by Category</h3>
+        <div class="chart-wrap"><canvas id="categoryChart"></canvas></div>
+      </div>
+      <div class="panel">
+        <h3>Income vs Expense</h3>
+        <div class="chart-wrap"><canvas id="monthChart"></canvas></div>
+      </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters">
+      <input type="text" id="searchInput" placeholder="🔍 Search transactions...">
+      <select id="filterType">
+        <option value="">All Types</option>
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+      </select>
+      <select id="filterCategory">
+        <option value="">All Categories</option>
+      </select>
+      <input type="month" id="filterMonth">
+      <button id="clearFilters" class="btn-ghost small">Clear</button>
+    </section>
+
+    <!-- Transactions table -->
+    <section class="panel table-panel">
+      <h3>Recent Transactions</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th>Note</th>
+              <th class="right">Amount</th>
+              <th class="right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="txTableBody">
+            <tr><td colspan="6" class="empty">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Add / Edit Modal -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Add Transaction</h3>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <form id="txForm">
+      <input type="hidden" id="txId">
+
+      <div class="type-toggle">
+        <button type="button" class="type-btn active" data-type="expense">Expense</button>
+        <button type="button" class="type-btn" data-type="income">Income</button>
+      </div>
+      <input type="hidden" id="txType" value="expense">
+
+      <label>Title</label>
+      <input type="text" id="txTitle" placeholder="e.g. Grocery shopping" required>
+
+      <div class="form-row">
+        <div>
+          <label>Amount (₹)</label>
+          <input type="number" id="txAmount" step="0.01" min="0.01" placeholder="0.00" required>
+        </div>
+        <div>
+          <label>Date</label>
+          <input type="date" id="txDate" required>
+        </div>
+      </div>
+
+      <label>Category</label>
+      <select id="txCategory" required></select>
+
+      <label>Note (optional)</label>
+      <textarea id="txNote" rows="2" placeholder="Add a short note..."></textarea>
+
+      <div id="formError" class="form-error"></div>
+
+      <button type="submit" class="btn-primary full">Save Transaction</button>
+    </form>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
